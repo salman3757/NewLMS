@@ -8,7 +8,7 @@
         <p>{{$course->description}}</p>
         @if(isset($videos))
             @if($videos)
-                <div class="d-flex">
+                <div class="d-flex flex-wrap">
                     @foreach($videos as $video)
                         <div class="m-3">
                             <?php   
@@ -19,6 +19,8 @@
                             <iframe width="320" height="215"
                             src="https://www.youtube.com/embed/{{$video_id}}" >
                             </iframe>
+                            <br>
+                            <a href="{{$video->url}}" target="_blank" class="btn btn-outline-dark" style="width:320px;">Play Video</a>
                         </div>
                     @endforeach
                 </div>
@@ -38,7 +40,7 @@
     <textarea name="comment_text" class="form-control" placeholder="Enter your Comments here..."></textarea>
     <input type="hidden" name="course_id" value="{{$course->id}}">
   </div>
-  <button type="submit" class="btn btn-info text-light my-3">Post Comment</button>
+  <button type="submit" class="btn btn-outline-primary my-3">Post Comment</button>
 </form>
 
 <div class="container comments my-5" style="margin-bottom:200px !important">

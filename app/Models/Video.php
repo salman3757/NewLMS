@@ -11,6 +11,8 @@ class Video extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function course(){
         return $this->belongsTo(Course::class, 'course_id');
     }

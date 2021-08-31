@@ -21,6 +21,7 @@
     <input type="password" name="password" class="form-control" id="exampleInputPassword1">
   </div>
   <button type="submit" class="btn btn-info my-3">Login</button>
+  <a href="admin_forgot_password">Forgot Password ?</a>
 </form>
 
 @endsection

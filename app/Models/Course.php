@@ -11,8 +11,10 @@ use App\Models\Comment;
 
 class Course extends Model
 {
+
     use HasFactory;
 
+    public $timestamps = false;
     public function videos(){
         return $this->hasMany(Video::class, 'course_id');
     }

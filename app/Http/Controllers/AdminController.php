@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\password_reset;
+
 use App\Models\Admin;
 use App\Models\Course;
 use App\Models\Client;
@@ -62,11 +68,11 @@ class AdminController extends Controller
         Session::forget('admin');
         return redirect('/');
     }
-
-
+    //Show Admin Panel
     public function show_admin_panel(){
         return view('admin.admin_panel');
     }
+
 
 
 
@@ -120,16 +126,15 @@ class AdminController extends Controller
 
         return redirect('show_courses');
     }
-
-
-
-
+    /**
+     * Courses CRUD Functions End
+     */
 
 
 
 
     /**
-     * Clients CRUD Functions
+     * Clients CRUD Functions Start
      */
     
      //Read
@@ -179,4 +184,70 @@ class AdminController extends Controller
          return redirect('show_clients');
      }
     
+     /**
+      * Clien CRUD End
+      */
+
+     
+    /**
+     * Forgot Password Section Start
+     */
+
+    //Show View to Get User's Email
+    public function show_forgot_password_view(){
+        return view('admin.forgot_password');
+    }
+
+    //*********************************** */
+    //  Function For *** Sending Mail  ***
+    public function process_password_reset(Request $req){
+        
+        //First check if any Admin exists in the Database with provided Email,
+        $email = $req->email;
+        $admin = Admin::where('email', $email)->first();
+        // If NO Admin Found with Matching Email Return Response Incorrect Email
+        if(!$admin){
+            return "Incorrect Email";
+        }
+        //Else, Send Email to Admin with Random Code
+        $code=Str::random(6);
+        Mail::to('ss3757761@gmail.com')->send(new password_reset('Salman', $code));
+
+        return view('admin.verify_code',['admin'=>$admin, 'code'=>$code]);
+    }
+
+    //Take User's Input for Code and Match and Verify it with the Code Sent to Mail
+    public function verify_code(Request $req){
+        if ($req->code == $req->users_code){
+            Session::put('id',$req->id);
+            return redirect('edit_password');
+        }
+        else{
+            return "Incorrect Code";
+        }
+    }
+
+    //Show Form to Edit Password
+    public function show_password_edit_view(){
+        return view('admin.edit_password');
+    }
+
+    //Update Password
+    public function update_password(Request $req){
+
+        $id = Session::get('id');
+     
+        $admin = Admin::findOrFail($id);
+        $admin->password = Hash::make($req->password);
+        $admin->save();
+
+        Session::forget('id');
+        
+        return view('admin.admin_login', ['message'=>'Passowrd Updated']);
+    }
+
+    /**
+     * Forgot Password Section End
+     */
+
 }

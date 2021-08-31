@@ -29,7 +29,14 @@ Route::post('/admin_login', [AdminController::class, 'login']);
 
 Route::get('/admin_logout', [AdminController::class, 'logout']);
 
-
+/**
+ * Admin FORGOT Password
+ */
+Route::get("admin_forgot_password",[AdminController::class, 'show_forgot_password_view']);
+Route::post("admin_forgot_password", [AdminController::class, 'process_password_reset']);
+Route::get('edit_password', [AdminController::class, 'show_password_edit_view']);
+Route::post('verify_code', [AdminController::class, 'verify_code']);
+Route::post('update_password', [AdminController::class, 'update_password']);
 /**
  *    GROUP MIDDLEWARE 'admin' ON ( ADMIN - Panel ) and CRUD Operations, STARTS From Here
  */
@@ -75,6 +82,7 @@ Route::middleware(['admin'])->group(function ()
 /**
  * Group Middleware 'admin' ENDS Here
  */
+
 
 
 //Client-SIDE VIEWs
